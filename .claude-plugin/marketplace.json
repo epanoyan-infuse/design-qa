@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "design-qa",
+  "description": "Internal plugin catalogue for design-qa: compare Figma designs with live web pages.",
+  "owner": {
+    "name": "Infuse AI Lab"
+  },
+  "plugins": [
+    {
+      "name": "design-qa",
+      "description": "Compare a Figma design with a live web page on every screen size: text (incl. missing or extra texts), font family, size, weight, italic and color (critical), line height and letter spacing (non-critical).",
+      "source": "./plugin",
+      "category": "development"
+    }
+  ]
+}

@@ -1,0 +1,278 @@
+:root {
+    --paper: #F4F6F8;
+    --sheet: #FFFFFF;
+    --ink: #1B2230;
+    --muted: #5C6677;
+    --rule: #D8DDE5;
+    --critical: #C0332B;
+    --critical-soft: #FBEAE8;
+    --minor: #A86A12;
+    --minor-soft: #FBF1E1;
+    --pass: #2F7A45;
+    --focus: #2F5BD3;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --step--1: 0.8125rem;
+    --step-0: 0.9375rem;
+    --step-1: 1.125rem;
+    --step-2: 1.5rem;
+    --step-3: 2.25rem;
+    color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --paper: #11151C;
+        --sheet: #181D26;
+        --ink: #E6E9EF;
+        --muted: #9AA3B2;
+        --rule: #2A313D;
+        --critical: #F07167;
+        --critical-soft: #3A1F1E;
+        --minor: #E0A23A;
+        --minor-soft: #33281A;
+        --pass: #6CC287;
+        --focus: #8AA8FF;
+    }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 var(--step-0)/1.5 var(--sans);
+    -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-underline-offset: 0.2em; }
+code { font-family: var(--mono); font-size: 0.92em; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.visually-hidden {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* Head: the verdict is the first thing read */
+.head {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 1.75rem;
+}
+.head-design { margin: 0 0 0.25rem; color: var(--muted); }
+.verdict {
+    margin: 0 0 0.5rem;
+    font-size: var(--step-3);
+    line-height: 1.15;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+}
+.verdict--fail { color: var(--critical); }
+.verdict--pass { color: var(--pass); }
+.head-facts { margin: 0 0 0.75rem; font-size: var(--step-1); display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.375rem; }
+.head-facts .tab-count { font-size: var(--step--1); font-weight: 600; }
+.head-facts-gap, .head-facts-rest { margin-left: 0.75rem; }
+.head-meta { margin: 0; display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; color: var(--muted); }
+.head-note { margin: 0.5rem 0 0; color: var(--muted); }
+
+main { max-width: 72rem; margin: 0 auto; padding: 0 1.5rem 3rem; }
+
+/* Device tabs: the one bold element */
+.devices {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid var(--ink);
+    overflow-x: auto;
+}
+.device-tab {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem 0.625rem;
+    border: 0;
+    border-radius: 6px 6px 0 0;
+    background: none;
+    color: var(--muted);
+    font: 600 var(--step-2)/1.2 var(--sans);
+    cursor: pointer;
+}
+.device-tab[aria-selected="true"] { background: var(--ink); color: var(--paper); }
+.device-tab:hover:not([aria-selected="true"]) { color: var(--ink); }
+
+.tab-counts { display: inline-flex; gap: 0.375rem; font-size: var(--step--1); font-weight: 600; }
+.tab-count { min-width: 1.75em; padding: 0.1em 0.45em; border-radius: 999px; text-align: center; font-variant-numeric: tabular-nums; }
+.tab-count--critical { background: var(--critical); color: #FFFFFF; }
+.tab-count--minor { background: var(--minor-soft); color: var(--minor); }
+.tab-count--zero { background: none; color: var(--muted); box-shadow: inset 0 0 0 1px var(--rule); }
+
+.device { background: var(--sheet); border: 1px solid var(--rule); border-top: 0; padding: 1.5rem; }
+
+/* Size sub-tabs */
+.sizes { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.25rem; }
+.size-tab {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.375rem 0.875rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--sheet);
+    color: var(--ink);
+    font: 600 var(--step-0)/1.3 var(--sans);
+    cursor: pointer;
+}
+.size-tab[aria-selected="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+
+.size-title { margin: 0; font-size: var(--step-1); font-weight: 650; }
+.size-frame { margin-left: 0.5rem; color: var(--muted); font-weight: 400; font-size: var(--step-0); }
+.size-facts { margin: 0.25rem 0 1.5rem; color: var(--muted); }
+
+/* Result views inside a size: Issues, Check by hand, Not compared, Match */
+.views { display: flex; flex-wrap: wrap; gap: 0 1.25rem; margin: 0 0 1rem; border-bottom: 1px solid var(--rule); }
+.view-tab {
+    padding: 0.5rem 0 0.5rem;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+    background: none;
+    color: var(--muted);
+    font: 600 var(--step-0)/1.3 var(--sans);
+    cursor: pointer;
+}
+.view-tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+.view-count { margin-left: 0.25rem; font-weight: 400; font-variant-numeric: tabular-nums; }
+.view-count--critical, .view-count--minor { padding: 0.05em 0.45em; border-radius: 999px; font-weight: 600; }
+.view-count--critical { background: var(--critical); color: #FFFFFF; }
+.view-count--minor { background: var(--minor-soft); color: var(--minor); }
+.view-intro { margin: 0 0 0.75rem; color: var(--muted); }
+.view-title { margin: 1.5rem 0 0.5rem; font-size: var(--step-0); font-weight: 650; }
+.js .view-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+html:not(.js) [data-tabs] { display: none; }
+[role="tabpanel"]:focus-visible { outline-offset: 4px; }
+.quiet { margin: 0; color: var(--muted); }
+
+.accordion-tools { display: flex; justify-content: flex-end; gap: 1rem; margin: 0 0 0.5rem; }
+.link-button { border: 0; background: none; padding: 0; color: var(--muted); font: inherit; font-size: var(--step--1); text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
+.link-button:hover { color: var(--ink); }
+
+/* Page sections (accordions) and issue rows */
+/* "Group by" toggle: Section (page-section accordions) vs Property (same issues, by check) */
+.group-by { display: inline-flex; gap: 0.25rem; margin: 0 0 1rem; padding: 0.2rem; border-radius: 999px; background: var(--rule); }
+.group-by-tab {
+    padding: 0.3rem 0.875rem;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    color: var(--muted);
+    font: 600 var(--step--1)/1.3 var(--sans);
+    cursor: pointer;
+}
+.group-by-tab[aria-selected="true"] { background: var(--sheet); color: var(--ink); }
+.property-section-label { margin: 0.75rem 0 0.25rem; font-size: var(--step--1); font-weight: 600; color: var(--muted); }
+.property-section-label:first-of-type { margin-top: 0; }
+
+.page-section { border-top: 1px solid var(--rule); }
+.page-section:last-of-type { border-bottom: 1px solid var(--rule); }
+.page-section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.625rem 0.25rem;
+    font-size: var(--step-0);
+    font-weight: 650;
+    cursor: pointer;
+    list-style: none;
+}
+.page-section-title::-webkit-details-marker { display: none; }
+.page-section-title::before {
+    content: "";
+    width: 0.5rem; height: 0.5rem; flex: none;
+    margin-right: -0.25rem;
+    border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted);
+    transform: rotate(-45deg);
+}
+.page-section[open] > .page-section-title::before { transform: rotate(45deg); }
+.page-section-title > span:first-of-type { flex: 1; }
+.page-section > .issues { margin-bottom: 0.75rem; }
+.issues { list-style: none; margin: 0; padding: 0; }
+.issue {
+    display: grid;
+    grid-template-columns: minmax(min(12rem, 100%), 1.6fr) minmax(min(7rem, 100%), 0.6fr) minmax(min(16rem, 100%), 1.6fr);
+    column-gap: 1.25rem;
+    align-items: baseline;
+    padding: 0.625rem 0.75rem 0.625rem 1rem;
+    border-left: 4px solid var(--minor);
+    border-bottom: 1px solid var(--rule);
+}
+.issue--critical { border-left-color: var(--critical); }
+.issue p { margin: 0; }
+.issue-text { font-weight: 600; overflow-wrap: anywhere; }
+.issue-note { display: block; font-weight: 400; color: var(--muted); font-size: var(--step--1); }
+.issue-property { color: var(--muted); }
+.issue-values { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; min-width: 0; }
+.value { display: inline-flex; align-items: center; gap: 0.375rem; max-width: 100%; min-width: 0; }
+.value code { overflow-wrap: anywhere; min-width: 0; }
+.value-side { color: var(--muted); font-size: var(--step--1); white-space: nowrap; }
+.value--page code { color: var(--critical); font-weight: 600; }
+.issue:not(.issue--critical) .value--page code { color: var(--minor); }
+.issue-also, .issue-location { grid-column: 1 / -1; font-size: var(--step--1); color: var(--muted); }
+.issue-also { margin-top: 0.25rem !important; }
+.issue-location { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 1rem; margin-top: 0.375rem; }
+.copy-selector {
+    display: inline-flex; align-items: center; gap: 0.375rem; max-width: 100%;
+    border: 0; background: none; padding: 0; color: var(--muted); font: inherit; cursor: pointer;
+}
+.copy-selector code { font-family: var(--mono); overflow-wrap: anywhere; }
+.copy-selector:hover, .copy-selector:hover code { color: var(--ink); }
+.copy-icon { flex: none; width: 0.9em; height: 0.9em; }
+.copy-icon::before {
+    content: ""; display: block; width: 100%; height: 100%;
+    border: 1.5px solid currentColor; border-radius: 2px;
+    box-shadow: 2px 2px 0 -1px var(--sheet), 2px 2px 0 0.5px currentColor;
+}
+.copy-done { font-weight: 600; color: var(--pass); }
+.copy-done:empty { display: none; }
+.figma-link { color: var(--muted); text-decoration: underline; text-underline-offset: 0.2em; }
+.figma-link:hover { color: var(--ink); }
+
+.swatch {
+    display: inline-block; width: 0.95rem; height: 0.95rem; border-radius: 3px;
+    background: var(--swatch); opacity: var(--swatch-alpha);
+    box-shadow: inset 0 0 0 1px rgba(127, 127, 127, 0.45);
+}
+
+.empty { color: var(--pass); font-weight: 600; margin: 0 0 1rem; }
+
+/* Plain lists of texts */
+.text-list { margin: 0; padding-left: 1.25rem; columns: 2 20rem; column-gap: 2rem; }
+.text-list li { break-inside: avoid; margin-bottom: 0.25rem; overflow-wrap: anywhere; }
+.text-list--single { columns: 1; }
+.differ-text { font-weight: 600; }
+.differ-properties { color: var(--muted); margin-left: 0.5rem; }
+.differ-times { color: var(--muted); font-size: var(--step--1); margin-left: 0.25rem; }
+.moved-note { display: block; color: var(--muted); font-size: var(--step--1); margin: 0.125rem 0 0; }
+
+.foot { max-width: 72rem; margin: 0 auto; padding: 0 1.5rem 2.5rem; color: var(--muted); font-size: var(--step--1); }
+
+@media (max-width: 760px) {
+    .head { padding-top: 1.5rem; }
+    .verdict { font-size: var(--step-2); }
+    .devices { overflow-x: visible; }
+    .device-tab { flex: 1 1 0; justify-content: center; flex-wrap: wrap; gap: 0.25rem 0.5rem; font-size: var(--step-0); padding: 0.625rem 0.375rem 0.5rem; }
+    .head-facts-rest { flex-basis: 100%; margin-left: 0; }
+    .device { padding: 1rem; }
+    .issue { grid-template-columns: 1fr; row-gap: 0.25rem; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .device-tab, .size-tab { transition: background-color 120ms ease, color 120ms ease; }
+    .page-section-title::before { transition: transform 120ms ease; }
+}
+
+@media print {
+    [data-tabs], .accordion-tools { display: none; }
+    [role="tabpanel"][hidden] { display: block !important; }
+    .js .view-title { position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; }
+    .device { border: 0; padding: 0; margin-bottom: 2rem; }
+}

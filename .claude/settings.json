@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(composer install*)",
+      "Bash(composer dump-autoload*)",
+      "Bash(composer test*)",
+      "Bash(composer analyse*)",
+      "Bash(composer cs*)",
+      "Bash(vendor/bin/phpunit*)",
+      "Bash(vendor/bin/phpstan*)",
+      "Bash(php bin/design-qa *)",
+      "Bash(php -v)",
+      "Bash(php -l *)"
+    ],
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>design-qa infinite scroll fixture</title>
+<style>body { margin: 0; } .item { height: 400px; }</style></head>
+<body>
+<h1>Endless list</h1>
+<div id="list"></div>
+<script>
+    const list = document.getElementById('list');
+    const add = () => { for (let i = 0; i < 5; i++) { const d = document.createElement('div'); d.className = 'item'; d.textContent = 'Item'; list.appendChild(d); } };
+    add();
+    addEventListener('scroll', () => { if (scrollY + innerHeight > document.documentElement.scrollHeight - 800) add(); });
+</script>
+</body>
+</html>

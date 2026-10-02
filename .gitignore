@@ -1,0 +1,10 @@
+.DS_Store
+
+# Engine
+plugin/engine/vendor/
+plugin/engine/.phpunit.cache/
+plugin/engine/.php-cs-fixer.cache
+plugin/engine/var/
+
+# Reports and captures are local to each developer
+design-qa-reports/

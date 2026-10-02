@@ -1,0 +1,49 @@
+{
+    "name": "infuse-ai-lab/design-qa-engine",
+    "description": "Engine of the design-qa Claude Code plugin: compares Figma designs with live web pages.",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": ">=8.2",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "chrome-php/chrome": "^1.14",
+        "symfony/console": "^7.4",
+        "symfony/http-client": "^7.4",
+        "symfony/process": "^7.4"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.75",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^11.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "DesignQa\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DesignQa\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:unit": "phpunit --testsuite unit",
+        "analyse": "phpstan analyse --memory-limit=1G",
+        "cs": "php-cs-fixer check --diff",
+        "cs-fix": "php-cs-fixer fix",
+        "qa": [
+            "@cs",
+            "@analyse",
+            "@test"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "platform": {
+            "php": "8.2.0"
+        }
+    },
+    "minimum-stability": "stable"
+}

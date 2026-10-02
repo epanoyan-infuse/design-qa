@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>design-qa collector fixture</title>
+    <style>
+        body { margin: 0; font-family: Georgia, serif; color: rgb(71, 85, 105); }
+        h1 { font-size: 40px; font-weight: 600; line-height: 48px; letter-spacing: -1px; margin: 0; }
+        @media (max-width: 500px) { h1 { font-size: 24px; line-height: 30px; } }
+        .skip { position: absolute; left: -9999px; }
+        .label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgb(0, 56, 103); }
+        .intro { font-size: 18px; line-height: 30.6px; max-width: 600px; }
+        .gone { display: none; }
+        .invisible { visibility: hidden; }
+        .faded { opacity: 0; }
+        .slider { width: 300px; overflow: hidden; white-space: nowrap; }
+        .slide { display: inline-block; width: 300px; }
+        .icon { font-family: sans-serif; }
+        .reveal { opacity: 0; transition: opacity 2s; }
+        .reveal.shown { opacity: 1; }
+        .spacer { height: 1500px; }
+        .narrow { width: 60px; font-size: 16px; }
+        .gradient { font-size: 32px; background: linear-gradient(90deg, #f00, #00f); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: #000; }
+        .fill { color: rgb(51, 51, 51); -webkit-text-fill-color: rgb(1, 42, 77); }
+        .modern { color: oklch(0.6 0.2 30); }
+        .missing-font { font-family: "NoSuchFont DesignQa", serif; }
+    </style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<h1>Main heading</h1>
+<p class="label">About the book</p>
+<p class="intro"><em>The Book</em> teaches   everything <strong>important</strong><br>Second line</p>
+<p class="gone">Display none text</p>
+<p class="invisible">Visibility hidden text</p>
+<p class="faded">Transparent text</p>
+<div class="slider"><div class="slide">Slide one</div><div class="slide">Slide two</div></div>
+<p><span class="icon">&#xE934;&#xE934;</span></p>
+<p id="device"></p>
+<p class="narrow"><span>Hello</span> <span>World</span></p>
+<h2 class="gradient">Gradient heading</h2>
+<p class="fill">Filled text</p>
+<p class="modern">Modern color</p>
+<p class="missing-font">Missing font</p>
+<div class="spacer"></div>
+<p class="reveal" id="reveal">Appears on scroll</p>
+<script>
+    document.getElementById('device').textContent = /iPhone/.test(navigator.userAgent) ? 'Phone agent' : 'Desktop agent';
+    new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('shown'); });
+    }).observe(document.getElementById('reveal'));
+</script>
+</body>
+</html>

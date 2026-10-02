@@ -1,0 +1,27 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use DesignQa\Cli\Kernel;
+use DesignQa\Cli\LocalTimeZone;
+
+$engineDir = dirname(__DIR__);
+
+if (PHP_VERSION_ID < 80200) {
+    fwrite(STDERR, sprintf("design-qa needs PHP 8.2 or newer, this is PHP %s.\n", PHP_VERSION));
+    exit(1);
+}
+
+$autoload = $engineDir . '/vendor/autoload.php';
+if (!is_file($autoload)) {
+    fwrite(STDERR, "design-qa: the engine's dependencies are not installed yet.\n");
+    fwrite(STDERR, sprintf("Fix: composer install --no-dev --working-dir=%s\n", escapeshellarg($engineDir)));
+    exit(1);
+}
+
+require $autoload;
+
+LocalTimeZone::apply();
+
+exit((new Kernel($engineDir, getenv()))->application()->run());

@@ -1,0 +1,8 @@
+{
+  "name": "design-qa",
+  "version": "0.1.0",
+  "description": "Compare a Figma design with a live web page on every screen size: text (incl. missing or extra texts), font family, size, weight, italic and color (critical), line height and letter spacing (non-critical).",
+  "author": {
+    "name": "Infuse AI Lab"
+  }
+}
