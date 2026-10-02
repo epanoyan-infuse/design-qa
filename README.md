@@ -5,9 +5,6 @@ A Claude Code plugin for developers. It compares a Figma design with a live web 
 **Checks:**
 - 🔴 Critical: text content (typos, different wording, missing or extra texts), font family (also a web font that did not load), font size, font weight, font style (italic), text color
 - 🟡 Non-critical: line height, letter spacing
-
-Spec and plan: [figma-design-qa-investigation.md](figma-design-qa-investigation.md). Architecture and rules for contributors: [CLAUDE.md](CLAUDE.md).
-
 ---
 
 ## Before you start
