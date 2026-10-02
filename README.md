@@ -159,5 +159,3 @@ php bin/design-qa read <page-url> <figma-url> --figma-response=tests/Fixtures/ke
 php bin/design-qa read <page-url> <figma-url> --save-raw=tests/Fixtures/<name>                           # record fixtures
 php bin/design-qa check <page-url> <figma-url> --figma-response=tests/Fixtures/kesler/figma-nodes.json
 ```
-
-Use `--figma-response` with the recorded Kesler fixture while developing, so you don't spend your Figma account's read quota. See [CLAUDE.md](CLAUDE.md) for the full architecture, accuracy rules, and contribution conventions.
