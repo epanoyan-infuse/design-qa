@@ -47,15 +47,15 @@ php -v && composer -V
 
 ## Step 2 — Install the plugin in Claude Code
 
-**While developing locally (this repo hasn't been published yet):**
+**From GitHub:**
 ```
-/plugin marketplace add ~/Projects/design-qa
+/plugin marketplace add epanoyan-infuse/design-qa
 /plugin install design-qa@design-qa
 ```
 
-**Once this project is published to GitHub**, the same install will work from the remote instead of a local path:
+**From a local clone (while developing on the plugin itself):**
 ```
-/plugin marketplace add infuse-ai-lab/design-qa
+/plugin marketplace add ~/Projects/design-qa
 /plugin install design-qa@design-qa
 ```
 
