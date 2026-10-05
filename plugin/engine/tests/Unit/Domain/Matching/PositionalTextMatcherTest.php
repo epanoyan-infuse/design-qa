@@ -89,6 +89,27 @@ final class PositionalTextMatcherTest extends TestCase
         self::assertTrue($result->matches[0]->design->isWhole());
     }
 
+    public function testDuplicatedHardWrappedHeadingWithOnlyOnePageCopyIsMissingAsAWhole(): void
+    {
+        // A headline wrapped onto several lines with Shift+Enter (one Figma text layer, kept as one
+        // TextElement, matching fortifyiq.com's "Carry-based Differential\nPower Analysis (CDPA)"
+        // heading) is placed twice in the design but exists only once on the page. The near copy
+        // matches normally; the far copy has nothing left to match. It must be reported as the one
+        // missing heading it is, not split into meaningless per-line fragments ("Carry-based
+        // Differential", "Power Analysis (CDPA)", ...).
+        $heading = "Carry-based Differential\nPower Analysis (CDPA)";
+        $result = $this->match(
+            [T::text('near', $heading, 0, 90, lines: 2), T::text('far', $heading, 0, 500, lines: 2)],
+            [T::text('p', 'Carry-based Differential Power Analysis (CDPA)', 0, 100)],
+        );
+
+        self::assertSame(['near' => 'p'], self::pairs($result));
+        self::assertCount(1, $result->unmatchedDesign);
+        self::assertSame('far', $result->unmatchedDesign[0]->text->id);
+        self::assertTrue($result->unmatchedDesign[0]->isWhole());
+        self::assertSame($heading, $result->unmatchedDesign[0]->content());
+    }
+
     public function testSymbolOnlyParagraphIsNotReportedAsMissing(): void
     {
         $design = T::text('f', "Intro line here\n* * *\nMore text follows", 0, 100, lines: 3);

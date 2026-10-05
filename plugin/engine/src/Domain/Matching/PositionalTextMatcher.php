@@ -136,14 +136,55 @@ final readonly class PositionalTextMatcher implements Matcher
         $anchors = [...$whole['matches'], ...$split['matches'], ...$similarWhole['matches'], ...$similar['matches']];
         $short = $this->assignShort([...$singles, ...$similar['unmatched']], $similar['free'], $pageKeys, $geometry, $anchors);
 
+        $matches = [...$whole['matches'], ...$split['matches'], ...$similarWhole['matches'], ...$similar['matches'], ...$short['matches']];
+        $uncertain = [...$whole['uncertain'], ...$split['uncertain'], ...$similarWhole['uncertain'], ...$similar['uncertain'], ...$short['uncertain']];
+
         return new MatchResult(
-            [...$whole['matches'], ...$split['matches'], ...$similarWhole['matches'], ...$similar['matches'], ...$short['matches']],
-            [...$whole['uncertain'], ...$split['uncertain'], ...$similarWhole['uncertain'], ...$similar['uncertain'], ...$short['uncertain']],
-            $short['unmatched'],
+            $matches,
+            $uncertain,
+            $this->wholeTextWhenNothingMatched($matches, $uncertain, $short['unmatched']),
             array_values($short['free']),
             $symbols,
             $pageSymbols,
         );
+    }
+
+    /**
+     * A design text split into paragraphs (pass b) that found no match anywhere, for any of its
+     * paragraphs, is reported as the one text it is, not as separate, meaningless line fragments
+     * ("Carry-based Differential", "Power Analysis (CDPA)", ...): the page never had anything to
+     * match those fragments against in the first place, so splitting bought nothing. A text with at
+     * least one matched or uncertain paragraph keeps its remaining fragments as they are: that text
+     * genuinely was found in parts, so reporting which part is still missing stays useful.
+     *
+     * @param list<TextMatch>      $matches
+     * @param list<UncertainMatch> $uncertain
+     * @param list<TextPart>       $unmatched
+     *
+     * @return list<TextPart>
+     */
+    private function wholeTextWhenNothingMatched(array $matches, array $uncertain, array $unmatched): array
+    {
+        $found = [];
+        foreach ([...$matches, ...$uncertain] as $decided) {
+            $found[$decided->design->text->id] = true;
+        }
+
+        $collapsed = [];
+        $wholeAdded = [];
+        foreach ($unmatched as $part) {
+            $id = $part->text->id;
+            if ($part->isWhole() || isset($found[$id])) {
+                $collapsed[] = $part;
+                continue;
+            }
+            if (!isset($wholeAdded[$id])) {
+                $wholeAdded[$id] = true;
+                $collapsed[] = TextPart::whole($part->text);
+            }
+        }
+
+        return $collapsed;
     }
 
     /**
