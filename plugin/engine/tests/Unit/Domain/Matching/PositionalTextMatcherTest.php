@@ -134,6 +134,23 @@ final class PositionalTextMatcherTest extends TestCase
         self::assertCount(1, $result->unmatchedPage);
     }
 
+    public function testShortTextNeedsSomeWordingOverlapEvenWithMatchingStyle(): void
+    {
+        // "Uncover EDA Tools" (a card's hover-reveal link on fortifyiq.com) and "Accept All" (the
+        // cookie banner's button) happen to share the same font size and weight, and can land in
+        // the same position gap. Sharing a style must not be enough on its own to call them the
+        // same text: their wording is only ~37% alike (similar_text), well under what a reworded
+        // button needs — they must stay unmatched, not be guessed as "the text changed".
+        $result = $this->match(
+            [T::text('f', 'Uncover EDA Tools', 0, 650)],
+            [T::text('p', 'Accept All', 0, 660)],
+        );
+
+        self::assertSame([], $result->matches);
+        self::assertCount(1, $result->unmatchedDesign);
+        self::assertSame('f', $result->unmatchedDesign[0]->text->id);
+    }
+
     public function testSameUniqueTextFarAwayIsStillTheSameText(): void
     {
         // Appearing once on each side, this wording cannot be confused with any other text: the

@@ -49,6 +49,13 @@ final readonly class PositionalTextMatcher implements Matcher
     /** Buttons shift sideways when a sibling button is added or removed, so allow more here. */
     private const SHORT_MAX_HORIZONTAL = 0.1;
     private const SHORT_MIN_LETTERS_ALIKE = 0.5;
+    /**
+     * A same-size, same-weight pair lowers the letters-alike bar (a button keeps its style when
+     * reworded) but must not waive it: two unrelated short texts that simply share a font size and
+     * weight (e.g. a card's hover link and a cookie banner's "Accept All" button) are not the same
+     * text just because they happen to look alike and sit in the same gap.
+     */
+    private const SHORT_MIN_LETTERS_ALIKE_WITH_SAME_STYLE = 0.4;
     private const SHORT_SCORE = 0.6;
 
     public function __construct(private TextNormalizer $normalizer = new TextNormalizer()) {}
@@ -338,7 +345,8 @@ final readonly class PositionalTextMatcher implements Matcher
                 $sameStyle = abs($designStyle->fontSize - $pageStyle->fontSize) < 0.5 && $designStyle->fontWeight === $pageStyle->fontWeight;
                 // Same limits as the other passes vertically (a gap without neighbours can span the screen).
                 $canPair = $vertical <= self::MAX_VERTICAL_DISTANCE && $horizontal <= self::SHORT_MAX_HORIZONTAL
-                    && ($letters >= self::SHORT_MIN_LETTERS_ALIKE || $sameStyle);
+                    && ($letters >= self::SHORT_MIN_LETTERS_ALIKE
+                        || ($sameStyle && $letters >= self::SHORT_MIN_LETTERS_ALIKE_WITH_SAME_STYLE));
                 $alike[$i][$k] = $canPair ? $letters : null;
             }
         }
