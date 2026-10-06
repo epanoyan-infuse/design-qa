@@ -6,6 +6,9 @@ namespace DesignQa\Infrastructure\Figma\Parser;
 
 use DesignQa\Application\Port\SourceException;
 use DesignQa\Domain\Model\Design;
+use DesignQa\Domain\Model\OpenItemDetector;
+use DesignQa\Domain\Model\Screen;
+use DesignQa\Domain\Model\ScreenSpec;
 
 /**
  * Turns a GET /v1/files/:key/nodes response into a Design.
@@ -15,6 +18,7 @@ final readonly class FigmaDocumentParser
     public function __construct(
         private ScreenDetector $screens = new ScreenDetector(),
         private FigmaTextCollector $texts = new FigmaTextCollector(),
+        private OpenItemDetector $openItems = new OpenItemDetector(),
     ) {}
 
     /**
@@ -36,9 +40,32 @@ final readonly class FigmaDocumentParser
             ));
         }
 
-        $screens = array_map(fn(FigmaNode $node) => $this->texts->collect($node, $this->screens->spec($node)), $screenNodes);
+        $screens = array_map(fn(FigmaNode $node) => $this->withOpenItem($this->texts->collect($node, $this->screens->spec($node))), $screenNodes);
         $fileName = is_string($response['name'] ?? null) ? $response['name'] . ' / ' : '';
 
         return new Design($fileName . $root->name(), $screens);
+    }
+
+    /**
+     * Carries the design's detected open item (e.g. an open accordion item), if any, onto the
+     * screen's spec so it reaches the page-capture step: detection needs the screen's resolved
+     * texts, which only exist after FigmaTextCollector has already built them.
+     */
+    private function withOpenItem(Screen $screen): Screen
+    {
+        $openText = $this->openItems->detect($screen);
+        if ($openText === null) {
+            return $screen;
+        }
+
+        $spec = $screen->spec;
+
+        return new Screen(
+            new ScreenSpec($spec->name, $spec->width, $spec->kind, $spec->viewportHeight, $openText),
+            $screen->height,
+            $screen->texts,
+            $screen->excluded,
+            $screen->notCheckedReason,
+        );
     }
 }

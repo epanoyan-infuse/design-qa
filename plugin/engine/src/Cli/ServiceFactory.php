@@ -18,6 +18,7 @@ use DesignQa\Infrastructure\Chrome\ChromeLocator;
 use DesignQa\Infrastructure\Chrome\ChromePageSource;
 use DesignQa\Infrastructure\Chrome\RawCaptureFile;
 use DesignQa\Infrastructure\Chrome\Step\DisableAnimationsStep;
+use DesignQa\Infrastructure\Chrome\Step\OpenAccordionStep;
 use DesignQa\Infrastructure\Chrome\Step\OpenMenuStep;
 use DesignQa\Infrastructure\Chrome\Step\ScrollThroughStep;
 use DesignQa\Infrastructure\Chrome\Step\WaitForFontsStep;
@@ -108,7 +109,7 @@ final readonly class ServiceFactory
         return new ChromePageSource(
             $this->chrome,
             $script,
-            [new DisableAnimationsStep(), new ScrollThroughStep(), new WaitForFontsStep(), new OpenMenuStep()],
+            [new DisableAnimationsStep(), new ScrollThroughStep(), new WaitForFontsStep(), new OpenMenuStep(), new OpenAccordionStep()],
             onRawCapture: $recorder,
         );
     }

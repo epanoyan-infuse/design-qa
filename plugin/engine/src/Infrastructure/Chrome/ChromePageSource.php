@@ -9,6 +9,7 @@ use DesignQa\Application\Port\PageSource;
 use DesignQa\Application\Port\SourceException;
 use DesignQa\Domain\Model\Screen;
 use DesignQa\Domain\Model\ScreenSpec;
+use DesignQa\Infrastructure\Chrome\Step\AccordionNotOpened;
 use DesignQa\Infrastructure\Chrome\Step\MenuNotOpened;
 use DesignQa\Infrastructure\Chrome\Step\PageStep;
 use HeadlessChromium\Browser;
@@ -92,6 +93,8 @@ final readonly class ChromePageSource implements PageSource
                     }
                 } catch (MenuNotOpened $e) {
                     return new Screen($spec, 0.0, [], [], sprintf('the menu could not be opened: %s', $e->getMessage()));
+                } catch (AccordionNotOpened $e) {
+                    return new Screen($spec, 0.0, [], [], sprintf('the open item could not be opened: %s', $e->getMessage()));
                 }
                 // Menu screens: only the first screenful counts, and texts under the open menu are covered.
                 $options = json_encode(['viewportOnly' => $spec->viewportHeight !== null], JSON_THROW_ON_ERROR);
